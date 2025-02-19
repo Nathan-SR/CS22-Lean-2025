@@ -99,6 +99,7 @@ Again, your task is to fill in the `sorry` below to prove this statement.
 
 -/
 
+
 @[autograded 3]
 theorem problem_2 : (p → q) → ¬ (p ∧ ¬ q) := by
   assume hpthenq
@@ -142,8 +143,8 @@ theorem problem_3 : ((p ∨ q) ∧ (p → r) ∧ (q → s)) → (r ∨ s) := by
   eliminate h1 with hp hq
   left
   have hr : r := hpr hp
-  {assumption}
+  assumption
   right
   have hs : s := hqs hq
-  {assumption}
+  assumption
   done

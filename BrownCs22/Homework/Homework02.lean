@@ -1,5 +1,6 @@
 import BrownCs22.Library.Tactics
 import BrownCs22.Library.TruthTables
+import Mathlib.Tactic.Positivity
 import AutograderLib
 
 namespace HW2
@@ -74,7 +75,9 @@ Remember `ℕ = {0, 1, 2, ...}`, the natural numbers.
 
 @[autograded 2]
 theorem problem_1a : ∃ n : ℕ, ∀ x : ℕ, n ≤ x := by
-  sorry
+  existsi 0
+  fix x
+  positivity
   done
 
 
@@ -87,7 +90,8 @@ What if we swap them? The proof game changes!
 
 @[autograded 2]
 theorem problem_1b : ∀ n : ℕ, ∃ x : ℕ, n ≤ x := by
-  sorry
+  fix x
+  use x
   done
 
 /-
@@ -110,7 +114,7 @@ For example:
 
 example (x : ℕ) : x ∣ 10 → x ∣ 10 := by
   assume hx10
-  dsimp dvd -- change the goal to an existential
+  dsimp dvd
   dsimp dvd at hx10 -- change the hypothesis hx10 to an existential
   assumption
   done
@@ -131,7 +135,8 @@ First, practice an introduction:
 
 @[autograded 1]
 theorem problem_2 : 220 ∣ 880 := by
-  sorry
+  existsi 4
+  linarith
   done
 
 /-
@@ -143,7 +148,14 @@ is also a divisor of 220.
 
 @[autograded 3]
 theorem problem_3 : ∀ x : ℕ, x ∣ 22 → x ∣ 88 := by
-  sorry
+  fix x
+  dsimp dvd
+  assume hxd
+  eliminate hxd with a h1
+  have h2 : 88 = x * (4 * a)
+  linarith
+  existsi (4 * a)
+  assumption
   done
 
 
@@ -177,9 +189,15 @@ No need to start with `assume`.
 
 -/
 
+variable (la : ℤ)
+def p : ℤ := 2
+
 @[autograded 3]
 theorem problem_4 (a b : ℤ) (h : ∀ x : ℤ, 2*a ≤ x ∨ x ≤ 2*b) : a ≤ b := by
-  sorry
+  have h2 : 2*a ≤ (a + b) ∨ (a + b) ≤ 2*b := h (a + b)
+  eliminate h2 with h3 h4
+  linarith
+  linarith
   done
 
 
